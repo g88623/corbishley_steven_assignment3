@@ -67,6 +67,11 @@ var getWorkers = function(workers){							// Argument: Object
 	}
 };
 
+for(var key in jsonWorkers){
+	coworker = getWorkers(key);
+	coworkers.push(coworker);
+}; // For loop, parses through JSON and sends to getWorkers function.
+
 
 
 console.log(jsonQueues);
