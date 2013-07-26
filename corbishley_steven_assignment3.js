@@ -20,55 +20,33 @@ var jsonWorkers = {
 		}
 	]
 };
-var jsonQueues = {
-	"queues": [
-		{
-			"name": "Security Cases",
-			"numberOfCases": 0
-		},
-		{
-			"name": "Performance Cases",
-			"numberOfCases": 0
-		},
-		{
-			"name": "Technical Cases",
-			"numberOfCases": 0
-		},
-		{
-			"name": "Out Of Office Cases",
-			"numberOfCases": 0
-		}
-	]
-};
 
 // Global Variables
-var coworkers = {};
+var coworkers = [];
+var casesInQueue = 10;
 
 
-var getWorkers = function(workers){
-	// Argument: Object
-	var isOutOfOffice = false;          // Local Variable
+var getWorkers = function(workers){							// Argument: Object
+	var isOutOfOffice = false;								// Local Variable
 	var workersWithQueues = {
-
-		"name": workers.name,         // Property: String
-		"outOfOffice": false,         // Property: Boolean
-		"numberOfCases": 0,           // Property: Number
-		"queuesAssigned": [],         // Property: Array
-		"primaryQueue": {},           // Property: Object
-		"workCase": function (){  // Method: Procedure
+		"name": workers.name,								// Property: String
+		"outOfOffice": false,								// Property: Boolean
+		"numberOfCases": 0,									// Property: Number
+		"primaryQueue": {
+			"name": (this.name + "\'s Queue"),
+			"numberOfCases": 0
+		},								// Property: Object
+		"queuesAssigned": [primaryQueue],					// Property: Array
+		"workCase": function (){
 			if(this.numberOfCases > 0){
 				this.numberOfCases--;
+				console.log(this.name + " has worked and closed one case.");
 			}
-		},
-		"toggleOutOfOffice": function(isOutOfOffice){
+		},						// Method: Procedure, Math, Output, Back
+		"setOutOfOffice": function(isOutOfOffice){
 			if(isOutOfOffice===true){              // Conditional
 				if(this.numberOfCases>0){          // Nested Conditional
-					this.numberOfCases = 0;
-					
-					//  Also assign the cases to the queue here.
-					
-					this.outOfOffice = true;
-					console.log(this.name + " had " + this.numberOfCases + " cases that needed to be assigned.");
+					console.log(this.name + " has " + this.numberOfCases + " cases that need to be closed before time off can be taken.");
 				} else {
 					this.outOfOffice = true;
 					console.log(this.name + " has no cases, and is free to take time off.");
@@ -77,14 +55,18 @@ var getWorkers = function(workers){
 				this.outOfOffice = false;
 				console.log(this.name + " has returned to the office.");
 			}
-		}, // Method: Mutator
+		},		// Method: Mutator, Argument: Boolean, Conditional, Nested Conditional
 		"isOutOfOffice": function(){
 			return this.outOfOffice;
-		} // Return Boolean
+		},					// Method: Function, Return Boolean
+		"getStatus": function(){
+			var statusMessage = (this.name + " currently has " + this.numberOfCases + " cases.");
+			console.log(statusMessage);
+			return statusMessage;
+		}						// Method: Accessor, Return String
 	}
 };
 
-for(var key in jsonWorkers){
-	coworkers = getWorkers(key);
-}
+
+
 console.log(jsonQueues);
