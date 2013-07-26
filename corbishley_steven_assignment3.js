@@ -27,7 +27,6 @@ var casesInQueue = 10;
 
 
 var getWorkers = function(workers){								// Argument: Object
-	var isOutOfOffice = false;									// Local Variable
 	var myCoworker = {
 		"name": workers.name,									// Property: String
 		"outOfOffice": false,									// Property: Boolean
@@ -68,10 +67,10 @@ var getWorkers = function(workers){								// Argument: Object
 			return queuesAssigned;
 		},						// Return Array
 		"getNumberOfCases": function(){
-			return numberOfCases;
+			return this.numberOfCases;
 		}	,					// Return Number
 		"addQueueToAssignedList": function(queueToAdd){
-			queuesAssigned.push(queueToAdd);
+			this.queuesAssigned.push(queueToAdd);
 		}	,	// Argument: Array
 		"say": function(message){
 			console.log(this.name + " says " + message);
@@ -92,11 +91,17 @@ for(var key in json.workers){									// For Loop
 while(casesInQueue > coworkers.length) {						// While Loop
 	console.log(casesInQueue + " cases are currently in the queue.");
 	for(var i = 0; i < coworkers.length; i++){					// Nested Loop
-		var myCoworker = getWorkers(coworkers[i]);
-		myCoworker.numberOfCases++;
-		casesInQueue--;
-		console.log(myCoworker.name + " took one case. There are now " + casesInQueue + " cases in the queue.");
+		var myCoworker = getWorkers(coworkers[i]);				// Local Variable
+		myCoworker.addQueueToAssignedList();
+		if(myCoworker.outOfOffice===false){
+			myCoworker.numberOfCases++;
+			casesInQueue--;
+			console.log(myCoworker.name + " took one case. There are now " + casesInQueue + " cases in the queue.");
+		}
+		myCoworker.getStatus();
 		myCoworker.workCase();
+		console.log(myCoworker.name + " has " + myCoworker.getNumberOfCases() + " cases.");
+		myCoworker.say("We are on a roll.");
 	}
 };
 
